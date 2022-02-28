@@ -16,6 +16,7 @@ def github_webhook():
     base_branch = output['pull_request']['base']['label']
     head_branch = output['pull_request']['head']['label']
     sender = output['sender']['html_url']
+    pp(output)
     log = f"Action: {action} - Repository: {repository} - Owner: {owner} - Base_Branch: {base_branch} - Head_Branch: {head_branch} - Sender: {sender}"
     print(log)
     return "Done"
