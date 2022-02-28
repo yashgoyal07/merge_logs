@@ -1,5 +1,7 @@
+from email import header
 from flask import Flask, request
 from pprint import pprint as pp
+import requests
 
 app = Flask(__name__)
 
@@ -15,8 +17,12 @@ def github_webhook():
     owner = output['repository']['owner']['html_url']
     base_branch = output['pull_request']['base']['label']
     head_branch = output['pull_request']['head']['label']
+    head_url = output['pull_request']['url']
     sender = output['sender']['html_url']
-    log = f"Action: {action} - Repository: {repository} - Owner: {owner} - Base_Branch: {base_branch} - Head_Branch: {head_branch} - Sender: {sender}"
+    # pp(output)
+    status_json = requests.get(head_url, headers={"Accept": "application/vnd.github.v3+json"})
+    status = status_json.json()
+    log = f"Action: {action} - Repository: {repository} - Owner: {owner} - Base_Branch: {base_branch} - Head_Branch: {head_branch} - Sender: {sender} - Merged: {status['merged']} - Mergeable: {status['mergeable']} - Mergeable State: {status['mergeable_state']}"
     print(log)
     return "Done"
 
