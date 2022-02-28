@@ -18,7 +18,7 @@ def github_webhook():
     owner = output['repository']['owner']['html_url']
     owner_name = output['repository']['owner']['login']
     base_branch = output['pull_request']['base']['label']
-    base_branch_ref = output['pull_request']['base']['sha']
+    base_branch_ref = output['pull_request']['head']['title']
     head_branch = output['pull_request']['head']['label']
     sender = output['sender']['html_url']
     pp(output)
