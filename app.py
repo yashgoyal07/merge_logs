@@ -20,12 +20,12 @@ def github_webhook():
     base_branch = output['pull_request']['base']['label']
     base_branch_ref = output['pull_request']['head']['title']
     head_branch = output['pull_request']['head']['label']
+    head_url = output['pull_request']['url']
     sender = output['sender']['html_url']
-    pp(output)
-    base_branch_data = base_branch.split(":")
-    status_json = requests.get(f"https://api.github.com/repos/{owner_name}/{repository_name}/commits/{base_branch_ref}/statuses", headers={"Accept": "application/vnd.github.v3+json"})
-    pp(status_json.json())
-    log = f"Action: {action} - Repository: {repository} - Owner: {owner} - Base_Branch: {base_branch} - Head_Branch: {head_branch} - Sender: {sender}"
+    # pp(output)
+    status_json = requests.get(head_url, headers={"Accept": "application/vnd.github.v3+json"})
+    status = status_json.json()
+    log = f"Action: {action} - Repository: {repository} - Owner: {owner} - Base_Branch: {base_branch} - Head_Branch: {head_branch} - Sender: {sender} - Merged: {status['merged']} - Mergeable: {status['mergeable']} - Mergeable State: {status['mergeable_state']}"
     print(log)
     return "Done"
 
